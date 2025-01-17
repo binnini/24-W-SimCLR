@@ -4,6 +4,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import numpy as np
+import matplotlib.pyplot as plt
 
 from simclr import SimCLR
 from simclr.modules import LogisticRegression, get_resnet
@@ -91,6 +92,10 @@ def test(args, loader, simclr_model, model, criterion, optimizer):
     loss_epoch = 0
     accuracy_epoch = 0
     model.eval()
+    
+    class_correct = {i: 0 for i in range(args.num_classes)}
+    class_total = {i: 0 for i in range(args.num_classes)}
+    
     for step, (x, y) in enumerate(loader):
         model.zero_grad()
 
@@ -105,6 +110,21 @@ def test(args, loader, simclr_model, model, criterion, optimizer):
         accuracy_epoch += acc
 
         loss_epoch += loss.item()
+        
+        for i in range(len(y)):
+            label = y[i].item()
+            class_total[label] += 1
+            if predicted[i] == label:
+                class_correct[label] += 1
+
+    class_accuracy = {i: class_correct[i] / class_total[i] if class_total[i] > 0 else 0 for i in range(args.num_classes)}
+    
+    # Plotting the accuracy for each class
+    plt.bar(class_accuracy.keys(), class_accuracy.values())
+    plt.xlabel('Class')
+    plt.ylabel('Accuracy')
+    plt.title('Accuracy for each class')
+    plt.show()
 
     return loss_epoch, accuracy_epoch
 
