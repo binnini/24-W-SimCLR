@@ -67,28 +67,28 @@ class TransformsSimCLR:
                     torchvision.transforms.ToTensor(),
                 ]
             )
-        elif method == "cutout":
+        elif method == "cutout":    # 안됨
             self.train_transform = torchvision.transforms.Compose(
                 [
                     torchvision.transforms.RandomErasing(p=0.5, scale=(0.02, 0.33), ratio=(0.3, 3.3)),
                     torchvision.transforms.ToTensor(),
                 ]
             )
-        elif method == "noise_injection":
+        elif method == "noise_injection":   # 안됨
             self.train_transform = torchvision.transforms.Compose(
                 [
                     torchvision.transforms.Lambda(lambda img: img + 0.1 * torch.randn_like(img)),
                     torchvision.transforms.ToTensor(),
                 ]
             )
-        elif method == "kernel_filtering":
+        elif method == "kernel_filtering": 
             self.train_transform = torchvision.transforms.Compose(
                 [
                     torchvision.transforms.Lambda(lambda img: img.filter(ImageFilter.GaussianBlur(radius=2))),
                     torchvision.transforms.ToTensor(),
                 ]
             )
-        elif method == "random_erasing":
+        elif method == "random_erasing":       # 안됨
             self.train_transform = torchvision.transforms.Compose(
                 [
                     torchvision.transforms.RandomErasing(p=0.5),
