@@ -119,12 +119,9 @@ def test(args, loader, simclr_model, model, criterion, optimizer):
 
     class_accuracy = {i: class_correct[i] / class_total[i] if class_total[i] > 0 else 0 for i in range(args.num_classes)}
     
-    # Plotting the accuracy for each class
-    plt.bar(class_accuracy.keys(), class_accuracy.values())
-    plt.xlabel('Class')
-    plt.ylabel('Accuracy')
-    plt.title('Accuracy for each class')
-    plt.show()
+    # Print the accuracy for each class
+    for class_id, accuracy in class_accuracy.items():
+        print(f"Class {class_id}: Accuracy = {accuracy:.2f}")
 
     return loss_epoch, accuracy_epoch
 
@@ -143,26 +140,26 @@ if __name__ == "__main__":
             args.dataset_dir,
             split="train",
             download=True,
-            transform=TransformsSimCLR(size=args.image_size).test_transform,
+            transform=TransformsSimCLR(size=args.image_size, method=args.aug_method).test_transform,
         )
         test_dataset = torchvision.datasets.STL10(
             args.dataset_dir,
             split="test",
             download=True,
-            transform=TransformsSimCLR(size=args.image_size).test_transform,
+            transform=TransformsSimCLR(size=args.image_size, method=args.aug_method).test_transform,
         )
     elif args.dataset == "CIFAR10":
         train_dataset = torchvision.datasets.CIFAR10(
             args.dataset_dir,
             train=True,
             download=True,
-            transform=TransformsSimCLR(size=args.image_size).test_transform,
+            transform=TransformsSimCLR(size=args.image_size, method=args.aug_method).test_transform,
         )
         test_dataset = torchvision.datasets.CIFAR10(
             args.dataset_dir,
             train=False,
             download=True,
-            transform=TransformsSimCLR(size=args.image_size).test_transform,
+            transform=TransformsSimCLR(size=args.image_size, method=args.aug_method).test_transform,
         )
     else:
         raise NotImplementedError

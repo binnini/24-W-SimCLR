@@ -13,7 +13,9 @@ image_size: 224
 start_epoch: 0
 epochs: 100
 dataset: "CIFAR10" # STL10
-pretrain: True 
+pretrain: True
+num_classes: 10
+aug_method: "org"
 
 # model options
 resnet: "resnet18"

@@ -68,13 +68,13 @@ def main(gpu, args):
             args.dataset_dir,
             split="unlabeled",
             download=True,
-            transform=TransformsSimCLR(size=args.image_size),
+            transform=TransformsSimCLR(size=args.image_size, method=args.aug_method),
         )
     elif args.dataset == "CIFAR10":
         train_dataset = torchvision.datasets.CIFAR10(
             args.dataset_dir,
             download=True,
-            transform=TransformsSimCLR(size=args.image_size),
+            transform=TransformsSimCLR(size=args.image_size, method=args.aug_method),
         )
     else:
         raise NotImplementedError
@@ -125,7 +125,8 @@ def main(gpu, args):
 
     writer = None
     if args.nr == 0:
-        writer = SummaryWriter()
+        log_dir = f'runs/{args.aug_method}'  # 원하는 로그 디렉토리를 설정합니다.
+        writer = SummaryWriter(log_dir=log_dir)
 
     args.global_step = 0
     args.current_epoch = 0
